@@ -4,8 +4,10 @@ import { use, useEffect, useState } from 'react';
 import axios from 'axios';
 import { BrowserRouter, Routes,Route,Link } from 'react-router-dom';
 import User from './components/User';
+import Modal from './components/Modal'
 
 function App() {
+  const [isModal,setIsModal] = useState(false)
   const [name,setName] = useState('')
   const [image,setImage] = useState('https://picsum.photos/200')
   const [email,setEmail] = useState('')
@@ -13,6 +15,8 @@ function App() {
 
   const [userData,setUserData] = useState({})
   const [users,setUsers] = useState([])
+
+  const [modalData,setModalData] = useState({})
 
   const styles = { 
     main:{
@@ -81,16 +85,19 @@ function App() {
               <td>{item.email}</td>
               <td>{item.age}</td>
               <td>
-                <Link to={'/user/'+item.id} className='text-primary fw-bold'>View</Link> | &nbsp;
-                <a href='#' className='text-danger fw-bold'>Delete</a>
+                <button onClick={(e)=>{setIsModal(true);
+                  setModalData(item)
+
+                }}>View</button>
+                
               </td>
             </tr>
           }):'Loading....'}
         </tbody>
       </table>
-      <Routes>
-        <Route  path='/user/:id' element={<User />}  />
-      </Routes>
+
+      {isModal===true?<Modal isModal={isModal} setIsModal={setIsModal} modalData={modalData} />:''}
+      
       </BrowserRouter>
     </div>
   );
